@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr 17 10:55:29 2019
-
 @author: Consultor
 """
 
 import requests
 import pandas as pd
-import json
-import time
 import numpy as np
 
 ##############################################################################
@@ -44,8 +41,17 @@ def livescores_all():       #Recupera todos los partidos del día
                 ls_registros.append(partido['scores'][registro])
             df_partidos.loc[i] = ls_registros
             i = i + 1
-        print(df_partidos['league_id'],df_partidos['localteam_id'])
         return(df_partidos)
+        
+def fixtures_id(partido_id):    #Análisis de estadísticas y eventos por partido
+    incluidos = 'stats,events'
+    http_request = requests.get(http + 'fixtures/{0}?api_token={1}&include={2}'.format(partido_id,sm_token,incluidos))
+    fixture = http_request.json()
+    fix_data = fixture['data']
+    ls_stats = fix_data['stats']['data']        # resumen estadísticas por equipo
+    ls_events = fix_data['events']['data']      # eventos cronológicos globales
+    
+    
 
         
         
